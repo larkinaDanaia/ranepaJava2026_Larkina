@@ -5,11 +5,11 @@ import ru.ranepa.model.Employee;
 import java.util.*;
 
 public class EmployeeRepositoryImpl implements EmployeeRepository {
-    // HashMap - это как таблица
+
     private Map<Long, Employee> employees = new HashMap<>();
     private Long nextId = 1L;
 
-    // сохраняет сотрудника, присваивает ему id
+
     @Override
     public String save(Employee employee) {
         employee.setId(nextId);
@@ -19,7 +19,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return message;
     }
 
-    // поиск сотрудника по айди
+
     @Override
     public Optional<Employee> findById(Long id) {
         return Optional.ofNullable(employees.get(id));
@@ -27,7 +27,6 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
     @Override
     public Iterable<Employee> findAll() {
-        // Возвращаем список всех значений из карты
         return new ArrayList<>(employees.values());
     }
 

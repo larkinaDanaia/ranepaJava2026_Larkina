@@ -10,7 +10,6 @@ public class Employee {
     private BigDecimal salary;
     private LocalDate hireDate;
 
-    // создание нового сотрудника
     public Employee(String name, String position, double salary, LocalDate hireDate) {
         this.name = name;
         this.position = position;
@@ -42,7 +41,6 @@ public class Employee {
         this.id = id;
     }
 
-    // чтобы красиво выводился сотрудник в консоль
     @Override
     public String toString() {
         return "Employee{" +

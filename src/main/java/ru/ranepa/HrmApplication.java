@@ -15,7 +15,6 @@ public class HrmApplication {
         EmployeeRepositoryImpl repository = new EmployeeRepositoryImpl();
         EmployeeService service = new EmployeeService(repository);
 
-        // создаем сканер для чтения ввода пользователя
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=== HRM System Menu ===");
@@ -24,7 +23,6 @@ public class HrmApplication {
 
 
         while (running) {
-            // показываем меню
             System.out.println("\n1. Show all employees");
             System.out.println("2. Add employee");
             System.out.println("3. Delete employee by ID");
@@ -68,7 +66,6 @@ public class HrmApplication {
         scanner.close();
     }
 
-    // показ всех сотрудников
     private static void showAllEmployees(EmployeeService service) {
         List<Employee> employees = service.getAllEmployees();
 
@@ -82,7 +79,6 @@ public class HrmApplication {
         }
     }
 
-    // добавление сотрудника
     private static void addEmployee(EmployeeService service, Scanner scanner) {
         System.out.print("Enter name: ");
         String name = scanner.nextLine();
@@ -123,7 +119,6 @@ public class HrmApplication {
         System.out.println(result);
     }
 
-    // удаление сотрудника
     private static void deleteEmployee(EmployeeService service, Scanner scanner) {
         System.out.print("Enter employee ID to delete: ");
         Long id = Long.parseLong(scanner.nextLine());
@@ -144,7 +139,6 @@ public class HrmApplication {
         }
     }
 
-    // показ статистики
     private static void showStatistics(EmployeeService service) {
         System.out.println("\n=== Statistics ===");
 

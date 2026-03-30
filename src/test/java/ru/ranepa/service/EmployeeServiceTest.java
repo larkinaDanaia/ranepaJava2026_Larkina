@@ -30,7 +30,6 @@ class EmployeeServiceTest {
 
         BigDecimal average = service.calculateAverageSalary();
 
-        // ✅ ИСПРАВЛЕНО: сравниваем как числа с допустимой погрешностью 0.01
         assertEquals(200.0, average.doubleValue(), 0.01);
     }
 

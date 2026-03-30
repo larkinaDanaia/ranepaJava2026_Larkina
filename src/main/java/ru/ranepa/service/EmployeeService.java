@@ -14,7 +14,7 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    // добавление сотрудника
+
     public String addEmployee(String name, String position, double salary, java.time.LocalDate hireDate) {
         Employee employee = new Employee(name, position, salary, hireDate);
         return employeeRepository.save(employee);
@@ -33,12 +33,11 @@ public class EmployeeService {
         return employeeRepository.delete(id);
     }
 
-    // удаление сотрудника
+
     public Employee findEmployeeById(Long id) {
         return employeeRepository.findById(id).orElse(null);
     }
 
-    // расчет средней зп
     public BigDecimal calculateAverageSalary() {
         List<Employee> allEmployees = getAllEmployees();
 
@@ -56,7 +55,6 @@ public class EmployeeService {
 
     }
 
-    // поиск самого высокооплачиваемого
     public Employee findTopEarner() {
         List<Employee> allEmployees = getAllEmployees();
 
