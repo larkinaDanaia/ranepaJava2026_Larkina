@@ -36,39 +36,36 @@ class EmployeeServiceTest {
 
     @Test
     void shouldFindTopEarner() {
-        // Given: добавляем сотрудников
+
         service.addEmployee("Low", "Intern", 50, LocalDate.now());
         service.addEmployee("High", "Director", 500, LocalDate.now());
         service.addEmployee("Mid", "Dev", 200, LocalDate.now());
 
-        // When: ищем топ
         Employee top = service.findTopEarner();
 
-        // Then: должен вернуться сотрудник с зарплатой 500
+
         assertNotNull(top);
         assertEquals("High", top.getName());
-        // ✅ ИСПРАВЛЕНО: сравниваем как числа
         assertEquals(500.0, top.getSalary().doubleValue());
     }
 
     @Test
     void shouldReturnZeroWhenNoEmployees() {
-        // When
+
         BigDecimal average = service.calculateAverageSalary();
 
-        // Then
+
         assertEquals(BigDecimal.ZERO, average);
     }
 
     @Test
     void shouldFindEmployeeById() {
-        // Given
+
         service.addEmployee("Ivan", "Developer", 150, LocalDate.now());
 
-        // When
         Employee found = service.findEmployeeById(1L);
 
-        // Then
+
         assertNotNull(found);
         assertEquals("Ivan", found.getName());
     }

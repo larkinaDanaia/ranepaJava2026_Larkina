@@ -9,7 +9,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     private Map<Long, Employee> employees = new HashMap<>();
     private Long nextId = 1L;
 
-    // сохраняет сотрудника и присваивает ему id
+    // сохраняет сотрудника, присваивает ему id
     @Override
     public String save(Employee employee) {
         employee.setId(nextId);

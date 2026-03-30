@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeService {
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
@@ -52,9 +52,8 @@ public class EmployeeService {
         }
 
         int count = allEmployees.size();
-        BigDecimal average = sumSalary.divide(BigDecimal.valueOf(count), 2, java.math.RoundingMode.HALF_UP);
+        return sumSalary.divide(BigDecimal.valueOf(count), 2, java.math.RoundingMode.HALF_UP);
 
-        return average;
     }
 
     // поиск самого высокооплачиваемого
@@ -66,7 +65,7 @@ public class EmployeeService {
             return null;
         }
 
-        Employee topEarner = allEmployees.get(0);
+        Employee topEarner = allEmployees.getFirst();
 
         for (Employee employee : allEmployees) {
             if (employee.getSalary().compareTo(topEarner.getSalary()) > 0) {
