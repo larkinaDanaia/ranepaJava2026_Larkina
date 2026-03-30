@@ -21,7 +21,7 @@ public class HrmApplication {
 
         boolean running = true;
 
-
+        // меню
         while (running) {
             System.out.println("\n1. Show all employees");
             System.out.println("2. Add employee");
