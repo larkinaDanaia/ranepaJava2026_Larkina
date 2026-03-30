@@ -13,11 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class EmployeeServiceTest {
 
     private EmployeeService service;
-    private EmployeeRepositoryImpl repository;
 
     @BeforeEach
     void setUp() {
-        repository = new EmployeeRepositoryImpl();
+        EmployeeRepositoryImpl repository = new EmployeeRepositoryImpl();
         service = new EmployeeService(repository);
     }
 

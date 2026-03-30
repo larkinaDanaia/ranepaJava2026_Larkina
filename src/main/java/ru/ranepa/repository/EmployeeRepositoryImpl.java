@@ -6,7 +6,7 @@ import java.util.*;
 
 public class EmployeeRepositoryImpl implements EmployeeRepository {
 
-    private Map<Long, Employee> employees = new HashMap<>();
+    private final Map<Long, Employee> employees = new HashMap<>();
     private Long nextId = 1L;
 
 
