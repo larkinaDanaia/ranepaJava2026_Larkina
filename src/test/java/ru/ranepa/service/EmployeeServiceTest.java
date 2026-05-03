@@ -3,7 +3,6 @@ package ru.ranepa.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.ranepa.model.Employee;
-import ru.ranepa.repository.EmployeeRepositoryImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

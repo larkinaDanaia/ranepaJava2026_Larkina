@@ -1,48 +1,30 @@
-package ru.ranepa.model;
+package ru.ranepa.dto;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "employees")
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmployeeResponseDto {
     private Long id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private String position;
-
-    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal salary;
-
-    @Column(name = "hire_date", nullable = false)
     private LocalDate hireDate;
-
-    @Column(name = "created_at")
     private LocalDate createdAt;
 
-    public Employee() {
+    public EmployeeResponseDto() {
     }
 
-    public Employee(String name, String position, BigDecimal salary, LocalDate hireDate) {
+    public EmployeeResponseDto(Long id, String name, String position,
+                               BigDecimal salary, LocalDate hireDate, LocalDate createdAt) {
+        this.id = id;
         this.name = name;
         this.position = position;
         this.salary = salary;
         this.hireDate = hireDate;
+        this.createdAt = createdAt;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDate.now();
-    }
-
-    // Getters and Setters
+    // Getters
     public Long getId() {
         return id;
     }

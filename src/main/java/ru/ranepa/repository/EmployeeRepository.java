@@ -1,13 +1,23 @@
 package ru.ranepa.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.ranepa.model.Employee;
 
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.List;
 
-public interface EmployeeRepository {
-    String save(Employee employee);
-    Optional<Employee> findById(Long id);
-    Iterable<Employee> findAll();
-    String delete(Long id);
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
+    List<Employee> findByPosition(String position);
+
+    List<Employee> findBySalaryGreaterThanEqual(BigDecimal salary);
+
+    @Query("SELECT AVG(e.salary) FROM Employee e")
+    Double getAverageSalary();
+
+    @Query("SELECT e FROM Employee e ORDER BY e.salary DESC")
+    List<Employee> findAllOrderBySalaryDesc();
 }

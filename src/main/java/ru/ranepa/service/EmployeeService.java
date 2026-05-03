@@ -1,76 +1,102 @@
 package ru.ranepa.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.ranepa.dto.EmployeeResponseDto;
+import ru.ranepa.dto.EmployeeStatsDto;
+import ru.ranepa.exception.EmployeeNotFoundException;
 import ru.ranepa.model.Employee;
 import ru.ranepa.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Service
+@Transactional
 public class EmployeeService {
+
     private final EmployeeRepository employeeRepository;
 
+    @Autowired
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
-
-    public String addEmployee(String name, String position, double salary, java.time.LocalDate hireDate) {
-        Employee employee = new Employee(name, position, salary, hireDate);
-        return employeeRepository.save(employee);
+    public EmployeeResponseDto createEmployee(Employee employee) {
+        Employee savedEmployee = employeeRepository.save(employee);
+        return convertToDto(savedEmployee);
     }
 
-    public List<Employee> getAllEmployees() {
-        List<Employee> result = new ArrayList<>();
-        for (Employee emp : employeeRepository.findAll()) {
-            result.add(emp);
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDto> getAllEmployees() {
+        return employeeRepository.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public EmployeeResponseDto getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException(id));
+        return convertToDto(employee);
+    }
+
+    public void deleteEmployee(Long id) {
+        if (!employeeRepository.existsById(id)) {
+            throw new EmployeeNotFoundException(id);
         }
-        return result;
+        employeeRepository.deleteById(id);
     }
 
-
-    public String removeEmployee(Long id) {
-        return employeeRepository.delete(id);
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDto> getEmployeesByPosition(String position) {
+        return employeeRepository.findByPosition(position)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-
-    public Employee findEmployeeById(Long id) {
-        return employeeRepository.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public List<EmployeeResponseDto> getEmployeesByMinSalary(BigDecimal minSalary) {
+        return employeeRepository.findBySalaryGreaterThanEqual(minSalary)
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    public BigDecimal calculateAverageSalary() {
-        List<Employee> allEmployees = getAllEmployees();
+    @Transactional(readOnly = true)
+    public EmployeeStatsDto getStatistics() {
+        long totalEmployees = employeeRepository.count();
 
-        if (allEmployees.isEmpty()) {
-            return BigDecimal.ZERO;
-        }
-
-        BigDecimal sumSalary = BigDecimal.ZERO;
-        for (Employee employee : allEmployees) {
-            sumSalary = sumSalary.add(employee.getSalary());
-        }
-
-        int count = allEmployees.size();
-        return sumSalary.divide(BigDecimal.valueOf(count), 2, java.math.RoundingMode.HALF_UP);
-
-    }
-
-    public Employee findTopEarner() {
-        List<Employee> allEmployees = getAllEmployees();
-
-
-        if (allEmployees.isEmpty()) {
-            return null;
-        }
-
-        Employee topEarner = allEmployees.getFirst();
-
-        for (Employee employee : allEmployees) {
-            if (employee.getSalary().compareTo(topEarner.getSalary()) > 0) {
-                topEarner = employee;
+        BigDecimal averageSalary = BigDecimal.ZERO;
+        if (totalEmployees > 0) {
+            Double avg = employeeRepository.getAverageSalary();
+            if (avg != null) {
+                averageSalary = BigDecimal.valueOf(avg).setScale(2, RoundingMode.HALF_UP);
             }
         }
 
-        return topEarner;
+        EmployeeResponseDto topEarner = null;
+        List<Employee> topEmployees = employeeRepository.findAllOrderBySalaryDesc();
+        if (!topEmployees.isEmpty()) {
+            topEarner = convertToDto(topEmployees.get(0));
+        }
+
+        return new EmployeeStatsDto(averageSalary, topEarner, totalEmployees);
+    }
+
+    private EmployeeResponseDto convertToDto(Employee employee) {
+        return new EmployeeResponseDto(
+                employee.getId(),
+                employee.getName(),
+                employee.getPosition(),
+                employee.getSalary(),
+                employee.getHireDate(),
+                employee.getCreatedAt()
+        );
     }
 }
